@@ -24,10 +24,8 @@ export class FormComponent implements OnInit {
 
   onSubmit(): void {
     
-    this.service.save(this.toForm()).subscribe(_ => {
-      this.snackBar.open("Form submitted", 'Close', {duration: 3000});
-      // retrigger loading of the dataSource in the service
-    });
+    this.service.save(this.toForm())
+    this.snackBar.open("Form submitted", 'Close', {duration: 3000});
   }
 
   private toForm() {

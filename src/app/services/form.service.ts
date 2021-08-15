@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Form } from '../models/form';
-import { ObservableInput, throwError} from 'rxjs';
+import { ObservableInput, Subject, throwError} from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
@@ -15,21 +15,37 @@ export class FormService {
       'Content-Type':  'application/json',
     })
   };
-  constructor(private httpClient: HttpClient) { }
+  private newForm: Subject<Form[]>;
+  public dataSource: Form[] = [];
+
+  constructor(private httpClient: HttpClient) { 
+    this.newForm = new Subject<Form[]>();
+
+    this.newForm.subscribe(data => {
+      this.dataSource = data;
+    });
+  }
 
   public save(form: Form) {
-    return this.httpClient.post<Form>(this.postUrl, form, this.httpOptions)
-    .pipe(
+     let obj = this.httpClient.post<Form>(this.postUrl, form, this.httpOptions).pipe(
       catchError(this.handleErrors)
     );
+    
+    obj.subscribe(_ => {
+      this.get();
+    });
   }
 
   public get() {
-    return this.httpClient.get<Form[]>(this.getUrl)
+     let  get = this.httpClient.get<Form[]>(this.getUrl)
     .pipe(
       retry(3),
       catchError(this.handleErrors)
     );
+
+    get.subscribe(data => {
+      this.newForm.next(data);
+    });
   }
 
   private handleErrors(error: HttpErrorResponse) : ObservableInput<any> {

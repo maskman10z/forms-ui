@@ -9,14 +9,11 @@ import { FormService } from 'src/app/services/form.service';
 })
 export class TableComponent implements OnInit {
 
-  constructor(private service: FormService) { }
+  constructor(public service: FormService) { }
   dataSource: Form[] = []; // should be moved to FormService to make it work
   displayedColumns: string[] = ['ID', 'First Name', 'Last Name'];
   ngOnInit(): void {
-    this.service.get().subscribe((forms: Form[]) => {
-        this.dataSource = forms;
-      }
-    )
+    this.service.get();
   }
 
 }
