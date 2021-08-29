@@ -3,6 +3,7 @@ import { Form } from 'src/app/models/form';
 import { FormService } from 'src/app/services/form.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Question } from 'src/app/models/question';
 
 @Component({
   selector: 'app-form',
@@ -12,15 +13,29 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class FormComponent implements OnInit {
 
   questionnaire: FormGroup;
+  questions: Question[] = [
+    new Question("firstName", "First Name:", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("lastName", "Last Name:", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question1", "Haben Sie sich selbst auf den Unterricht vorbereitet?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question2", "Wurde im Unterricht Ihr Verhalten interpretiert und gedeutet?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question3", "Konnten Sie dem Unterrichtsverlauf folgen?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question4", "Haben Sie während des Unterrichts Störungen wahrgenommen?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question5", "Hatte Sie Möglichkeiten, sich selbst im Unterricht zu vertreten?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question6", "Wurde die Bedeutung der Unterrichtsinhalte deutlich gemacht?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question7", "War ihnen klar, warum sie diese Unterrichtsinhalte behandelt haben?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question8", "Gab es für Sie Gestaltungsmöglichkeiten?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question9", "Waren Ihnen die Bewertungskriterien bekannt?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question10", "Wussten Sie was getan werden kann, um die eigene Leistung zu verbessern?", new FormControl('', [Validators.required, Validators.maxLength(20)]))
+  ];
+
 
   constructor(private service: FormService, private snackBar: MatSnackBar) {
-    this.questionnaire = new FormGroup({
-      firstName: new FormControl('', [Validators.required, Validators.maxLength(20)]),
-      lastName: new FormControl('', [Validators.required])
-    });
+    this.questionnaire = new FormGroup({});
    }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.questions.forEach(q => { this.questionnaire.addControl(q.getName(), q.getControl()) });
+  }
 
   onSubmit(): void {
     
@@ -29,7 +44,12 @@ export class FormComponent implements OnInit {
   }
 
   private toForm() {
-    return new Form((Math.random() * 100) + "", this.questionnaire.get("firstName")?.value, this.questionnaire.get("lastName")?.value);
+    let f: Form = new Form();
+    this.questions.forEach(q => {
+      let name = q.getName();
+      f[name] = this.questionnaire.get(q.getName())?.value
+    });
+    return f;
   }
 
   isInvalid(control: string): boolean | undefined {

@@ -3,18 +3,11 @@
     <mat-card-subtitle>Class A</mat-card-subtitle>
     <mat-card-content>
         <form [formGroup]="questionnaire" (ngSubmit)="onSubmit()">
-            <div>
+            <div *ngFor="let question of questions">
                 <mat-form-field>
-                    <mat-label>First Name:</mat-label>
-                    <input matInput formControlName="firstName">
-                    <mat-error *ngIf="isInvalid('firstName')">{{getErrorMessage('firstName')}}</mat-error>
-                </mat-form-field>
-            </div>
-            <div>
-                <mat-form-field>
-                    <mat-label>Last Name:</mat-label>
-                    <input matInput formControlName="lastName">
-                    <mat-error *ngIf="isInvalid('lastName')">{{getErrorMessage('lastName')}}</mat-error>
+                    <mat-label>{{question.getLabel()}}</mat-label>
+                    <input matInput formControlName="{{question.getName()}}">
+                    <mat-error *ngIf="isInvalid('{{question.getName()}}')">{{getErrorMessage(question.getName())}}</mat-error>
                 </mat-form-field>
             </div>
             <button mat-button [disabled]="!questionnaire.valid">Submit</button>
