@@ -3,13 +3,17 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Form } from '../models/form';
 import { ObservableInput, Subject, throwError} from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class FormService {
 
-  private postUrl: string = "http://localhost:8080/questionnaire";
-  private getUrl: string = "http://localhost:8080/";
+
+  private baseUrl: string = environment.apiUrl;
+  private postUrl: string = this.baseUrl + "/questionnaire";
+  private getUrl: string =  this.baseUrl + "/";
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json',
