@@ -6,3 +6,16 @@ mat-form-field {
 mat-card {
     margin:20px;
 }
+
+#logo-img {
+    width:200px; 
+    height:100px;
+}
+
+#logo {
+    background-color: #00446b;
+    text-align: end;
+    margin-right:20px;
+    margin-left: 20px;
+    padding-right: 10px;
+}

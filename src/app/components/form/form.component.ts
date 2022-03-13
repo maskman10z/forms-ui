@@ -14,8 +14,9 @@ export class FormComponent implements OnInit {
 
   questionnaire: FormGroup;
   questions: Question[] = [
-    new Question("firstName", "First Name:", new FormControl('', [Validators.required, Validators.maxLength(20)])),
-    new Question("lastName", "Last Name:", new FormControl('', [Validators.required, Validators.maxLength(20)])),
+    new Question("question11", "Klasse", new FormControl('', [Validators.required, Validators.maxLength(30)])),
+    new Question("question12", "Fach", new FormControl('', [Validators.required, Validators.maxLength(30)])),
+    
     new Question("question1", "Haben Sie sich selbst auf den Unterricht vorbereitet?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
     new Question("question2", "Wurde im Unterricht Ihr Verhalten interpretiert und gedeutet?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
     new Question("question3", "Konnten Sie dem Unterrichtsverlauf folgen?", new FormControl('', [Validators.required, Validators.maxLength(20)])),
@@ -38,7 +39,7 @@ export class FormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    
+
     this.service.save(this.toForm())
     this.snackBar.open("Form submitted", 'Close', {duration: 3000});
   }
@@ -57,9 +58,9 @@ export class FormComponent implements OnInit {
   }
 
   getErrorMessage(controlName: string): string | undefined {
-    
+
     let control = this.questionnaire.get(controlName);
-    
+
     if(control?.errors?.required) {
       return "Field is required";
     }
@@ -67,7 +68,7 @@ export class FormComponent implements OnInit {
     if(control?.errors?.maxlength) {
       return "Input is too long";
     }
-    
+
     return;
   }
 }

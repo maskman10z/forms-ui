@@ -11,18 +11,18 @@ import { environment } from '../../environments/environment';
 export class FormService {
 
 
-  private baseUrl: string = environment.apiUrl;
-  private postUrl: string = this.baseUrl + "/questionnaire";
-  private getUrl: string =  this.baseUrl + "/";
-  private httpOptions = {
+  private readonly baseUrl: string = environment.apiUrl;
+  private readonly postUrl: string = this.baseUrl + "/questionnaire";
+  private readonly getUrl: string =  this.baseUrl + "/questionnaire";
+  private readonly httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json',
     })
   };
-  private newForm: Subject<Form[]>;
+  private readonly newForm: Subject<Form[]>;
   public dataSource: Form[] = [];
 
-  constructor(private httpClient: HttpClient) { 
+  constructor(private readonly httpClient: HttpClient) {
     this.newForm = new Subject<Form[]>();
 
     this.newForm.subscribe(data => {
@@ -31,17 +31,17 @@ export class FormService {
   }
 
   public save(form: Form) {
-     let obj = this.httpClient.post<Form>(this.postUrl, form, this.httpOptions).pipe(
+     const obj = this.httpClient.post<Form>(this.postUrl, form, this.httpOptions).pipe(
       catchError(this.handleErrors)
     );
-    
+
     obj.subscribe(_ => {
       this.get();
     });
   }
 
   public get() {
-     let  get = this.httpClient.get<Form[]>(this.getUrl)
+    const get = this.httpClient.get<Form[]>(this.getUrl)
     .pipe(
       retry(3),
       catchError(this.handleErrors)

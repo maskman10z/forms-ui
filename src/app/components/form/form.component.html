@@ -1,16 +1,17 @@
+<div id="logo"><img src="/assets/logo.svg" alt="image" id="logo-img" ></div>
 <mat-card>
-    <mat-card-title>Questionnaire</mat-card-title>
-    <mat-card-subtitle>Class A</mat-card-subtitle>
+    <mat-card-title>Fragebogen</mat-card-title>
+    <mat-card-subtitle></mat-card-subtitle>
     <mat-card-content>
         <form [formGroup]="questionnaire" (ngSubmit)="onSubmit()">
             <div *ngFor="let question of questions">
+                <span>{{question.getLabel()}}</span>
                 <mat-form-field>
-                    <mat-label>{{question.getLabel()}}</mat-label>
                     <input matInput formControlName="{{question.getName()}}">
                     <mat-error *ngIf="isInvalid('{{question.getName()}}')">{{getErrorMessage(question.getName())}}</mat-error>
                 </mat-form-field>
             </div>
-            <button mat-button [disabled]="!questionnaire.valid">Submit</button>
+            <button mat-button [disabled]="!questionnaire.valid">Senden</button>
         </form>
     </mat-card-content>
 </mat-card>
